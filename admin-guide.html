@@ -161,34 +161,6 @@
         <div class="container">
 
             <!-- ================================ -->
-            <!-- ARCHITEKTURA                     -->
-            <!-- ================================ -->
-            <h2>Architektura</h2>
-            <p>Agent SÚKL Léčiva se skládá ze tří částí:</p>
-
-            <div class="arch-diagram">
-┌──────────────────┐     API key      ┌──────────────────┐    Managed Identity    ┌──────────────────┐
-│                  │ ──────────────►   │                  │  ──────────────────►   │                  │
-│   M365 Copilot   │                  │   Proxy API      │                        │  Azure AI Search │
-│   (agent)        │ ◄──────────────  │   (Container App)│  ◄──────────────────   │  (sukl-drugs,    │
-│                  │     JSON          │                  │       JSON              │   sukl-pharmacies)│
-└──────────────────┘                  └──────────────────┘                        └──────────────────┘
-                                             │
-                                       NAT Gateway
-                                       (statická IP)
-            </div>
-
-            <ul>
-                <li><strong>M365 Copilot agent</strong> — deklarativní agent s pluginem, nasazený do M365 tenanta jako ZIP balíček</li>
-                <li><strong>Proxy API</strong> — FastAPI kontejner na Azure Container Apps, překládá jednoduché REST dotazy na OData filtry pro AI Search. Autentizuje se API klíčem (M365 → proxy) a managed identity (proxy → AI Search)</li>
-                <li><strong>Azure AI Search</strong> — indexy <code>sukl-drugs</code> (68 000 léků) a <code>sukl-pharmacies</code> (2 671 lékáren) s naplněnými daty z otevřených dat SÚKL</li>
-            </ul>
-
-            <div class="callout callout-info">
-                <strong>Proč proxy?</strong> Azure AI Search má IP firewall — M365 Copilot nemá statickou IP a nemůže se připojit přímo. Proxy na Container Apps s NAT Gateway zajišťuje statickou odchozí IP, která je na firewallu povolená. Navíc proxy překládá jednoduché parametry na OData syntaxi, což zvyšuje spolehlivost dotazů.
-            </div>
-
-            <!-- ================================ -->
             <!-- PŘEDPOKLADY                      -->
             <!-- ================================ -->
             <h2>Než začnete</h2>
