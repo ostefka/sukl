@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uživatelský návod — SÚKL Léčiva</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --surface: #161b22;
+            --surface2: #1c2333;
+            --border: #30363d;
+            --text: #e6edf3;
+            --text-muted: #8b949e;
+            --accent: #58a6ff;
+            --accent-hover: #79c0ff;
+            --green: #3fb950;
+            --red: #f85149;
+            --yellow: #d29922;
+            --purple: #bc8cff;
+            --card-radius: 12px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        .container { max-width: 780px; margin: 0 auto; padding: 0 24px; }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 48px 0 40px;
+            text-align: center;
+        }
+        header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+        header h1 span { color: var(--accent); }
+        header p { color: var(--text-muted); font-size: 1.05rem; max-width: 600px; margin: 0 auto; }
+        .badge-row { margin-top: 16px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+        .badge {
+            display: inline-block; padding: 4px 12px; border-radius: 20px;
+            font-size: 0.78rem; font-weight: 600; letter-spacing: 0.02em;
+        }
+        .badge-blue { background: rgba(88,166,255,0.15); color: var(--accent); border: 1px solid rgba(88,166,255,0.3); }
+        .badge-green { background: rgba(63,185,80,0.15); color: var(--green); border: 1px solid rgba(63,185,80,0.3); }
+        .badge-purple { background: rgba(188,140,255,0.15); color: var(--purple); border: 1px solid rgba(188,140,255,0.3); }
+
+        .back-link {
+            display: inline-block; margin: 24px 0 0; font-size: 0.9rem;
+            color: var(--accent); text-decoration: none;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        /* Article */
+        article { padding: 40px 0 60px; }
+        h2 { font-size: 1.5rem; margin: 40px 0 12px; color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        h3 { font-size: 1.15rem; margin: 28px 0 10px; color: var(--accent); }
+        p { margin-bottom: 14px; color: var(--text-muted); font-size: 0.95rem; }
+        ol, ul { padding-left: 24px; margin-bottom: 16px; }
+        li { margin-bottom: 6px; color: var(--text-muted); font-size: 0.95rem; }
+        li strong { color: var(--text); }
+        a { color: var(--accent); }
+
+        /* Feature list */
+        .feature-list { list-style: none; padding: 0; }
+        .feature-list li { padding: 8px 0 8px 28px; position: relative; color: var(--text-muted); font-size: 0.95rem; }
+        .feature-list li::before { position: absolute; left: 0; font-size: 0.92rem; }
+        .feature-list li.yes::before { content: "✅"; }
+        .feature-list li.no::before { content: "❌"; }
+        .feature-list li.info::before { content: "💡"; }
+
+        /* Cards */
+        .card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--card-radius); padding: 20px 24px; margin-bottom: 16px;
+        }
+        .card-title { font-weight: 600; font-size: 1.05rem; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+        .card p, .card li { color: var(--text-muted); font-size: 0.92rem; }
+        .card ul { padding-left: 20px; margin-top: 6px; }
+
+        /* Prompt examples */
+        .prompt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        @media (max-width: 640px) { .prompt-grid { grid-template-columns: 1fr; } }
+        .prompt {
+            background: var(--surface2); border: 1px solid var(--border);
+            border-radius: 10px; padding: 14px 16px; cursor: pointer;
+            transition: border-color 0.2s; position: relative;
+        }
+        .prompt:hover { border-color: var(--accent); }
+        .prompt-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 4px; font-weight: 600; }
+        .prompt-text { font-size: 0.92rem; color: var(--text); }
+        .prompt .copy-hint { position: absolute; top: 8px; right: 10px; font-size: 0.7rem; color: var(--text-muted); opacity: 0; transition: opacity 0.2s; }
+        .prompt:hover .copy-hint { opacity: 1; }
+        .prompt.copied .copy-hint { color: var(--green); opacity: 1; }
+
+        /* Callout */
+        .callout { border-radius: 8px; padding: 14px 18px; margin: 16px 0; font-size: 0.9rem; }
+        .callout-tip { background: rgba(63,185,80,0.08); border-left: 3px solid var(--green); }
+        .callout-tip strong { color: var(--green); }
+        .callout-warn { background: rgba(210,153,34,0.08); border-left: 3px solid var(--yellow); }
+        .callout-warn strong { color: var(--yellow); }
+        .callout-info { background: rgba(88,166,255,0.08); border-left: 3px solid var(--accent); }
+        .callout-info strong { color: var(--accent); }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.9rem; }
+        th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: var(--surface2); color: var(--text-muted); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+        td { color: var(--text-muted); }
+        td code { background: var(--surface2); padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; color: var(--accent); }
+
+        /* Code */
+        code { background: var(--surface2); padding: 2px 6px; border-radius: 4px; font-size: 0.88rem; color: var(--accent); }
+
+        /* FAQ */
+        details { background: var(--surface); border: 1px solid var(--border); border-radius: var(--card-radius); margin-bottom: 8px; }
+        details summary { padding: 14px 18px; cursor: pointer; font-weight: 600; font-size: 0.95rem; list-style: none; }
+        details summary::before { content: "▸ "; color: var(--text-muted); }
+        details[open] summary::before { content: "▾ "; }
+        details .detail-body { padding: 0 18px 14px; font-size: 0.9rem; color: var(--text-muted); }
+        details .detail-body p { margin-bottom: 8px; }
+
+        /* Footer */
+        footer { border-top: 1px solid var(--border); padding: 24px 0; text-align: center; color: var(--text-muted); font-size: 0.82rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>💊 SÚKL <span>Léčiva</span></h1>
+            <p>Uživatelský návod k agentovi pro vyhledávání léků a lékáren v M365 Copilot</p>
+            <div class="badge-row">
+                <span class="badge badge-blue">68 000 léků</span>
+                <span class="badge badge-green">2 671 lékáren</span>
+                <span class="badge badge-purple">SÚKL OpenData</span>
+            </div>
+            <a href="index.html" class="back-link">← Zpět na přehled agentů</a>
+        </div>
+    </header>
+
+    <article>
+        <div class="container">
+
+            <!-- ================================ -->
+            <!-- CO JE SÚKL LÉČIVA               -->
+            <!-- ================================ -->
+            <h2>Co je SÚKL Léčiva?</h2>
+            <p>
+                <strong>SÚKL Léčiva</strong> je agent pro M365 Copilot, který vám umožní vyhledávat informace
+                o léčivých přípravcích a lékárnách registrovaných v České republice. Místo procházení
+                webových stránek SÚKL se stačí zeptat přirozeným jazykem.
+            </p>
+            <p>Agent čerpá data výhradně z jednoho zdroje:</p>
+            <ul>
+                <li><strong>SÚKL OpenData</strong> (<a href="https://opendata.sukl.cz" target="_blank">opendata.sukl.cz</a>) — Státní ústav pro kontrolu léčiv — registrace léčivých přípravků a registrace lékáren</li>
+            </ul>
+
+            <div class="callout callout-tip">
+                <strong>Agent si nevymýšlí.</strong> Všechna data pocházejí z otevřených dat SÚKL. Pokud informaci nenajde, řekne vám to — místo toho, aby si ji vymyslel.
+            </div>
+
+            <!-- ================================ -->
+            <!-- JAK ZAČÍT                        -->
+            <!-- ================================ -->
+            <h2>Jak začít</h2>
+            <ol>
+                <li>Otevřete <strong>M365 Copilot</strong> na webu <a href="https://m365.cloud.microsoft/chat" target="_blank">m365.cloud.microsoft/chat</a></li>
+                <li>V <strong>levém panelu</strong> najděte agenta <strong>SÚKL Léčiva</strong> — kliknutím na něj přepnete konverzaci přímo na agenta</li>
+                <li>Alternativně můžete do pole pro zprávy napsat <strong>@SÚKL Léčiva</strong> a za zmínkou zadat svůj dotaz</li>
+                <li>Agent zavolá příslušné API a vrátí vám strukturovanou odpověď</li>
+            </ol>
+
+            <div class="callout callout-info">
+                <strong>Důležité:</strong> Agent je dostupný <strong>výhradně v prostředí M365 Copilot</strong>. Najdete ho v levém panelu Copilotu nebo ho zavolejte přes <strong>@SÚKL Léčiva</strong>. Pokud napíšete dotaz do obecného Copilotu bez zmínky agenta, nedostanete data ze SÚKL.
+            </div>
+
+            <!-- ================================ -->
+            <!-- CO AGENT UMÍ                     -->
+            <!-- ================================ -->
+            <h2>Co agent umí</h2>
+
+            <h3>💊 Vyhledávání léků</h3>
+            <p>Hledejte léky podle názvu, účinné látky, ATC kódu nebo držitele registrace. Filtrujte podle způsobu výdeje, dostupnosti nebo lékové formy.</p>
+            <div class="prompt-grid">
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Hledání podle názvu</div>
+                    <div class="prompt-text">Najdi léky s názvem Paralen</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Hledání podle účinné látky</div>
+                    <div class="prompt-text">Najdi léky s účinnou látkou ibuprofen</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Volně prodejné léky</div>
+                    <div class="prompt-text">Najdi volně prodejné léky s paracetamolem</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Léky na předpis</div>
+                    <div class="prompt-text">Jaké léky s metforminem jsou na předpis?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">ATC skupina</div>
+                    <div class="prompt-text">Najdi léky ve skupině ATC N02BE (paracetamol)</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Léky s dodávkami</div>
+                    <div class="prompt-text">Najdi léky s ibuprofenem, které mají aktivní dodávky</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Léková forma</div>
+                    <div class="prompt-text">Najdi léky s paracetamolem ve formě sirupu</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Držitel registrace</div>
+                    <div class="prompt-text">Jaké léky registruje společnost Zentiva?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+            </div>
+
+            <h3>📋 Detail léku</h3>
+            <p>Zobrazte kompletní registrační údaje léku: složení, ATC kód, způsob výdeje, dokumenty SPC/PIL, držitele registrace a další.</p>
+            <div class="prompt-grid">
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Detail podle názvu</div>
+                    <div class="prompt-text">Zobraz detail léku PARALEN 500</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Detail podle kódu</div>
+                    <div class="prompt-text">Zjisti detail léku s kódem SÚKL 0027370</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+            </div>
+
+            <h3>🏥 Vyhledávání lékáren</h3>
+            <p>Hledejte lékárny podle města, PSČ nebo jména. Filtrujte pohotovostní lékárny, zásilkové lékárny nebo nemocniční lékárny.</p>
+            <div class="prompt-grid">
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Lékárny ve městě</div>
+                    <div class="prompt-text">Najdi lékárny v Brně</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Pohotovostní lékárny</div>
+                    <div class="prompt-text">Najdi pohotovostní lékárny v Praze</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Zásilkový prodej</div>
+                    <div class="prompt-text">Jaké lékárny v Ostravě nabízejí zásilkový prodej?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Nemocniční lékárny</div>
+                    <div class="prompt-text">Najdi nemocniční lékárny v Plzni</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Lékárny podle PSČ</div>
+                    <div class="prompt-text">Najdi lékárny s PSČ 60200</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Detail lékárny</div>
+                    <div class="prompt-text">Zobraz detail lékárny s kódem pracoviště 06006000</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+            </div>
+
+            <h3>🔬 Pokročilé dotazy</h3>
+            <p>Kombinujte filtry pro přesnější výsledky:</p>
+            <div class="prompt-grid">
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Kombinace filtrů</div>
+                    <div class="prompt-text">Najdi volně prodejné léky s ibuprofenem ve formě tablety, které mají dodávky</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Doping</div>
+                    <div class="prompt-text">Které léky s pseudoefedrinem jsou na seznamu dopingu?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Více výsledků</div>
+                    <div class="prompt-text">Najdi 30 léků s omeprazolem na předpis</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Navazující dotaz</div>
+                    <div class="prompt-text">Zobraz detail prvního léku z výsledků</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+            </div>
+
+            <!-- ================================ -->
+            <!-- PŘEHLED NÁSTROJŮ                 -->
+            <!-- ================================ -->
+            <h2>Přehled nástrojů</h2>
+            <p>Agent má k dispozici 4 nástroje:</p>
+            <table>
+                <thead><tr><th>Nástroj</th><th>Co dělá</th></tr></thead>
+                <tbody>
+                    <tr><td><code>searchDrugs</code></td><td>Vyhledání léků dle názvu, účinné látky, ATC, formy, výdeje, dopingu, dodávek</td></tr>
+                    <tr><td><code>getDrugDetail</code></td><td>Kompletní registrační údaje léku podle kódu SÚKL</td></tr>
+                    <tr><td><code>searchPharmacies</code></td><td>Vyhledání lékáren dle města, PSČ, typu, pohotovosti, zásilkového prodeje</td></tr>
+                    <tr><td><code>getPharmacyDetail</code></td><td>Detail lékárny — adresa, kontakty, pracovní doba, vedoucí lékárník</td></tr>
+                </tbody>
+            </table>
+
+            <!-- ================================ -->
+            <!-- CO AGENT NEUMÍ                   -->
+            <!-- ================================ -->
+            <h2>Co agent neumí</h2>
+            <p>Data SÚKL obsahují <strong>registrace léků</strong> a <strong>registrace lékáren</strong> jako dva <strong>oddělené</strong> datasety. Neexistuje mezi nimi žádná vazba. Proto:</p>
+
+            <ul class="feature-list">
+                <li class="no"><strong>Zjistit, která lékárna má konkrétní lék skladem</strong> — data neobsahují informace o skladových zásobách lékáren</li>
+                <li class="no"><strong>Zjistit ceny léků</strong> — data neobsahují ceny ani výši úhrad pojišťovnami</li>
+                <li class="no"><strong>Doporučit dávkování nebo léčbu</strong> — agent není lékař ani lékárník</li>
+                <li class="no"><strong>Upozornit na interakce nebo kontraindikace</strong> — tato data nejsou součástí databáze</li>
+                <li class="no"><strong>Vyhledat léky podle diagnózy nebo příznaků</strong> — data neobsahují diagnostické informace</li>
+                <li class="no"><strong>Porovnat ceny nebo doporučit nejlevnější alternativu</strong></li>
+                <li class="no"><strong>Odpovídat na dotazy mimo české léky a lékárny</strong></li>
+            </ul>
+
+            <div class="callout callout-warn">
+                <strong>Příklad nefunkčního dotazu:</strong> „Najdi lékárny v Praze, které mají Paralen" — agent <strong>nemůže</strong> propojit léky a lékárny, protože SÚKL tato data nespravuje. Můžete ale zvlášť vyhledat lékárny v Praze a zvlášť léky Paralen.
+            </div>
+
+            <!-- ================================ -->
+            <!-- TIPY                             -->
+            <!-- ================================ -->
+            <h2>Tipy pro efektivní používání</h2>
+
+            <div class="card">
+                <div class="card-title">💡 Buďte konkrétní</div>
+                <p>Čím přesnější dotaz, tím lepší výsledek. Místo „najdi nějaké léky" zkuste „najdi volně prodejné léky s ibuprofenem ve formě tablety".</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">💡 Používejte filtry</div>
+                <p>Zmíněte způsob výdeje (volně prodejné / na předpis), lékovou formu (tableta, sirup, mast) nebo dostupnost dodávek — agent je přeloží na přesné filtry.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">💡 ATC kódy</div>
+                <p>Pokud znáte ATC kód, použijte ho — je přesnější než textové hledání. Můžete použít i prefix: „N02*" najde celou skupinu analgetik.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">💡 Navazujte v konverzaci</div>
+                <p>Po zobrazení seznamu léků můžete říct „Zobraz detail prvního" nebo „Filtruj jen ty na předpis". Agent si pamatuje kontext.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">💡 Kód SÚKL</div>
+                <p>Každý lék má unikátní 7místný kód SÚKL. Pokud ho znáte, můžete jít rovnou na detail: „Detail léku 0027370". Kratší čísla agent doplní nulami automaticky.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">💡 Léky a lékárny zvlášť</div>
+                <p>Pokud potřebujete informace o lécích i lékárnách, zadejte dva dotazy zvlášť — např. „Najdi léky s ibuprofenem" a pak „Najdi pohotovostní lékárny v Praze".</p>
+            </div>
+
+            <!-- ================================ -->
+            <!-- FAQ                              -->
+            <!-- ================================ -->
+            <h2>Časté otázky</h2>
+
+            <details>
+                <summary>Agent neodpovídá nebo vrací chybu</summary>
+                <div class="detail-body">
+                    <p>Možné příčiny:</p>
+                    <ul>
+                        <li><strong>Backend se probouzí</strong> — po delší neaktivitě může proxy potřebovat pár sekund na start.</li>
+                        <li><strong>Dočasný výpadek</strong> — Azure služby mohou být krátkodobě nedostupné.</li>
+                    </ul>
+                    <p>Zkuste dotaz zopakovat za minutu. Pokud problém přetrvává, kontaktujte správce.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>Agent si vymýšlí data — jak to poznám?</summary>
+                <div class="detail-body">
+                    <p>Agent je nastavený tak, aby čerpal <strong>pouze z API SÚKL</strong>. Pokud odpověď obsahuje tabulku s kódy SÚKL, ATC kódy a konkrétními údaji, pochází z API. Pokud je odpověď vágní a obecná, agent pravděpodobně API nezavolal.</p>
+                    <p><strong>Řešení:</strong> Ujistěte se, že jste agenta zavolali přes <strong>@SÚKL Léčiva</strong> (ne obecný Copilot).</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>Co znamená „dodávky: ano/ne"?</summary>
+                <div class="detail-body">
+                    <p><strong>Dodávky = ano</strong> znamená, že výrobce/distributor aktuálně dodává lék na český trh. <strong>Dodávky = ne</strong> znamená, že lék je sice registrovaný, ale aktuálně se nedodává — může být dočasně nedostupný nebo stažený z trhu.</p>
+                    <p>Můžete filtrovat pomocí: „Najdi léky s ibuprofenem, které mají dodávky."</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>Co je ATC kód?</summary>
+                <div class="detail-body">
+                    <p>ATC (Anatomicko-terapeuticko-chemický) klasifikační systém třídí léky do skupin podle orgánu, na který působí, a chemické struktury. Například:</p>
+                    <ul>
+                        <li><strong>N02BE01</strong> — paracetamol (N = nervový systém, 02 = analgetika, BE = anilidy, 01 = paracetamol)</li>
+                        <li><strong>M01AE01</strong> — ibuprofen (M = muskuloskeletální systém)</li>
+                    </ul>
+                    <p>Můžete hledat podle celého kódu nebo prefixu: „N02*" najde všechna analgetika.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>Proč agent neví, kde lék koupím?</summary>
+                <div class="detail-body">
+                    <p>Data SÚKL obsahují <strong>registrace</strong> léků (kdo lék zaregistroval, jaké má složení, jak se vydává) a <strong>registrace</strong> lékáren (kde se nachází, kdo je vedoucí lékárník). Tyto dva datasety nejsou nijak propojeny — SÚKL nespravuje informace o tom, které lékárny mají které léky skladem.</p>
+                    <p>Pro informace o dostupnosti léků ve vaší lékárně doporučujeme kontaktovat lékárnu přímo.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>Mohu výsledky použít pro rozhodování o léčbě?</summary>
+                <div class="detail-body">
+                    <p><strong>Ne.</strong> Agent poskytuje registrační údaje z databáze SÚKL — tedy administrativní informace o léku (složení, forma, registrace). Pro jakékoli rozhodování o léčbě, dávkování nebo interakcích se obraťte na svého lékaře nebo lékárníka.</p>
+                </div>
+            </details>
+
+            <!-- ================================ -->
+            <!-- ZDROJE DAT                       -->
+            <!-- ================================ -->
+            <h2>Zdroj dat</h2>
+            <div class="card">
+                <div class="card-title">📊 Otevřená data SÚKL</div>
+                <ul>
+                    <li><strong>SÚKL OpenData</strong> — <a href="https://opendata.sukl.cz" target="_blank">opendata.sukl.cz</a> — Státní ústav pro kontrolu léčiv</li>
+                    <li>Databáze registrovaných léčivých přípravků (68 000 záznamů)</li>
+                    <li>Databáze registrovaných lékáren a výdejen (2 671 záznamů)</li>
+                </ul>
+            </div>
+
+        </div>
+    </article>
+
+    <footer>
+        <div class="container">
+            Poslední aktualizace: únor 2026 · Data: Otevřená data SÚKL (opendata.sukl.cz)
+        </div>
+    </footer>
+
+    <script>
+        function copyPrompt(el) {
+            const text = el.querySelector('.prompt-text').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                el.classList.add('copied');
+                el.querySelector('.copy-hint').textContent = '✓ zkopírováno';
+                setTimeout(() => {
+                    el.classList.remove('copied');
+                    el.querySelector('.copy-hint').textContent = '📋 kopírovat';
+                }, 1500);
+            });
+        }
+    </script>
+</body>
+</html>
