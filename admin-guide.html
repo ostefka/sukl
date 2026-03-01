@@ -280,52 +280,6 @@
             </ol>
 
             <!-- ================================ -->
-            <!-- BACKEND INFRASTRUKTURA           -->
-            <!-- ================================ -->
-            <h2>Backend infrastruktura (pro IT tým)</h2>
-            <p>Tato sekce je určena pro správce Azure infrastruktury. Běžný administrátor M365 ji nepotřebuje.</p>
-
-            <h3>Azure komponenty</h3>
-            <table>
-                <thead><tr><th>Komponenta</th><th>Název</th><th>Resource Group</th></tr></thead>
-                <tbody>
-                    <tr><td>AI Search (S1)</td><td><code>search-airlift-s1</code></td><td><code>rg-airlift-rag</code></td></tr>
-                    <tr><td>Container App</td><td><code>ca-sukl-api</code></td><td><code>rg-sukl-api</code></td></tr>
-                    <tr><td>Container App Environment</td><td><code>cae-sukl-api</code></td><td><code>rg-sukl-api</code></td></tr>
-                    <tr><td>NAT Gateway</td><td><code>natgw-sukl-api</code></td><td><code>rg-sukl-api</code></td></tr>
-                    <tr><td>VNet</td><td><code>vnet-sukl-api</code></td><td><code>rg-sukl-api</code></td></tr>
-                    <tr><td>Container Registry</td><td><code>acrdomcp</code></td><td><code>rg-ado-mcp-swedencentral</code></td></tr>
-                </tbody>
-            </table>
-
-            <h3>Autentizace</h3>
-            <table>
-                <thead><tr><th>Úsek</th><th>Metoda</th><th>Detail</th></tr></thead>
-                <tbody>
-                    <tr><td>M365 Copilot → Proxy</td><td>API klíč</td><td>Header <code>api-key</code>, registrovaný v M365 app package</td></tr>
-                    <tr><td>Proxy → AI Search</td><td>Managed Identity</td><td>System-assigned MI s rolí <code>Search Index Data Reader</code></td></tr>
-                </tbody>
-            </table>
-
-            <h3>IP adresy na firewallu AI Search</h3>
-            <p>AI Search má povoleny tyto IP adresy:</p>
-            <ul>
-                <li><code>9.223.238.69</code> — NAT Gateway proxy (statická IP)</li>
-                <li>Další IP adresy pro přímý přístup vývojářů</li>
-            </ul>
-
-            <h3>Aktualizace dat</h3>
-            <p>Data v indexech pocházejí z <a href="https://opendata.sukl.cz" target="_blank">otevřených dat SÚKL</a>. Pro aktualizaci je třeba znovu spustit import pipeline (Python skripty pro ingest).</p>
-
-            <h3>Nasazení nové verze proxy</h3>
-            <p>Nová verze proxy se nasadí pomocí skriptu <code>deploy.ps1</code>:</p>
-            <ol>
-                <li>Upravte kód v <code>sukl-api/</code></li>
-                <li>Změňte parametr <code>$ImageTag</code> v <code>deploy.ps1</code> (např. <code>v1.2.0</code>)</li>
-                <li>Spusťte <code>.\deploy.ps1</code> — skript sestaví image, pushne do ACR a aktualizuje Container App</li>
-            </ol>
-
-            <!-- ================================ -->
             <!-- ŘEŠENÍ PROBLÉMŮ                  -->
             <!-- ================================ -->
             <h2>Řešení problémů</h2>
