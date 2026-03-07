@@ -4,26 +4,150 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Uživatelský návod — SÚKL Léčiva</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --surface: #161b22;
+            --surface2: #1c2333;
+            --border: #30363d;
+            --text: #e6edf3;
+            --text-muted: #8b949e;
+            --accent: #58a6ff;
+            --accent-hover: #79c0ff;
+            --green: #3fb950;
+            --red: #f85149;
+            --yellow: #d29922;
+            --purple: #bc8cff;
+            --card-radius: 12px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        .container { max-width: 780px; margin: 0 auto; padding: 0 24px; }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 48px 0 40px;
+            text-align: center;
+        }
+        header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+        header h1 span { color: var(--accent); }
+        header p { color: var(--text-muted); font-size: 1.05rem; max-width: 600px; margin: 0 auto; }
+        .badge-row { margin-top: 16px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+        .badge {
+            display: inline-block; padding: 4px 12px; border-radius: 20px;
+            font-size: 0.78rem; font-weight: 600; letter-spacing: 0.02em;
+        }
+        .badge-blue { background: rgba(88,166,255,0.15); color: var(--accent); border: 1px solid rgba(88,166,255,0.3); }
+        .badge-green { background: rgba(63,185,80,0.15); color: var(--green); border: 1px solid rgba(63,185,80,0.3); }
+        .badge-purple { background: rgba(188,140,255,0.15); color: var(--purple); border: 1px solid rgba(188,140,255,0.3); }
+
+        .back-link {
+            display: inline-block; margin: 24px 0 0; font-size: 0.9rem;
+            color: var(--accent); text-decoration: none;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        /* Article */
+        article { padding: 40px 0 60px; }
+        h2 { font-size: 1.5rem; margin: 40px 0 12px; color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        h3 { font-size: 1.15rem; margin: 28px 0 10px; color: var(--accent); }
+        p { margin-bottom: 14px; color: var(--text-muted); font-size: 0.95rem; }
+        ol, ul { padding-left: 24px; margin-bottom: 16px; }
+        li { margin-bottom: 6px; color: var(--text-muted); font-size: 0.95rem; }
+        li strong { color: var(--text); }
+        a { color: var(--accent); }
+
+        /* Feature list */
+        .feature-list { list-style: none; padding: 0; }
+        .feature-list li { padding: 8px 0 8px 28px; position: relative; color: var(--text-muted); font-size: 0.95rem; }
+        .feature-list li::before { position: absolute; left: 0; font-size: 0.92rem; }
+        .feature-list li.yes::before { content: "✅"; }
+        .feature-list li.no::before { content: "❌"; }
+        .feature-list li.info::before { content: "💡"; }
+
+        /* Cards */
+        .card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--card-radius); padding: 20px 24px; margin-bottom: 16px;
+        }
+        .card-title { font-weight: 600; font-size: 1.05rem; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+        .card p, .card li { color: var(--text-muted); font-size: 0.92rem; }
+        .card ul { padding-left: 20px; margin-top: 6px; }
+
+        /* Prompt examples */
+        .prompt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        @media (max-width: 640px) { .prompt-grid { grid-template-columns: 1fr; } }
+        .prompt {
+            background: var(--surface2); border: 1px solid var(--border);
+            border-radius: 10px; padding: 14px 16px; cursor: pointer;
+            transition: border-color 0.2s; position: relative;
+        }
+        .prompt:hover { border-color: var(--accent); }
+        .prompt-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 4px; font-weight: 600; }
+        .prompt-text { font-size: 0.92rem; color: var(--text); }
+        .prompt .copy-hint { position: absolute; top: 8px; right: 10px; font-size: 0.7rem; color: var(--text-muted); opacity: 0; transition: opacity 0.2s; }
+        .prompt:hover .copy-hint { opacity: 1; }
+        .prompt.copied .copy-hint { color: var(--green); opacity: 1; }
+
+        /* Callout */
+        .callout { border-radius: 8px; padding: 14px 18px; margin: 16px 0; font-size: 0.9rem; }
+        .callout-tip { background: rgba(63,185,80,0.08); border-left: 3px solid var(--green); }
+        .callout-tip strong { color: var(--green); }
+        .callout-warn { background: rgba(210,153,34,0.08); border-left: 3px solid var(--yellow); }
+        .callout-warn strong { color: var(--yellow); }
+        .callout-info { background: rgba(88,166,255,0.08); border-left: 3px solid var(--accent); }
+        .callout-info strong { color: var(--accent); }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.9rem; }
+        th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: var(--surface2); color: var(--text-muted); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+        td { color: var(--text-muted); }
+        td code { background: var(--surface2); padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; color: var(--accent); }
+
+        /* Code */
+        code { background: var(--surface2); padding: 2px 6px; border-radius: 4px; font-size: 0.88rem; color: var(--accent); }
+
+        /* FAQ */
+        details { background: var(--surface); border: 1px solid var(--border); border-radius: var(--card-radius); margin-bottom: 8px; }
+        details summary { padding: 14px 18px; cursor: pointer; font-weight: 600; font-size: 0.95rem; list-style: none; }
+        details summary::before { content: "▸ "; color: var(--text-muted); }
+        details[open] summary::before { content: "▾ "; }
+        details .detail-body { padding: 0 18px 14px; font-size: 0.9rem; color: var(--text-muted); }
+        details .detail-body p { margin-bottom: 8px; }
+
+        /* Footer */
+        footer { border-top: 1px solid var(--border); padding: 24px 0; text-align: center; color: var(--text-muted); font-size: 0.82rem; }
+    </style>
 </head>
 <body>
-    <header class="site-header">
-        <div class="container header-center">
-            <h1>SÚKL Léčiva</h1>
-            <p class="subtitle">Uživatelský návod k agentovi pro vyhledávání léků a lékáren v M365 Copilot</p>
+    <header>
+        <div class="container">
+            <h1>💊 SÚKL <span>Léčiva</span></h1>
+            <p>Uživatelský návod k agentovi pro vyhledávání léků a lékáren v M365 Copilot</p>
             <div class="badge-row">
-                <span class="badge">68 000 léků</span>
-                <span class="badge">2 671 lékáren</span>
-                <span class="badge">7 000+ SPC dokumentů</span>
-                <span class="badge">SÚKL OpenData</span>
+                <span class="badge badge-blue">68 000 léků</span>
+                <span class="badge badge-green">2 671 lékáren</span>
+                <span class="badge badge-purple">7 000+ SPC dokumentů</span>
+                <span class="badge badge-purple">SÚKL OpenData</span>
             </div>
-            <a href="index.html" class="back-link">&larr; Zpět na přehled agentů</a>
+            <a href="index.html" class="back-link">← Zpět na přehled agentů</a>
         </div>
     </header>
 
     <article>
-        <div class="container-narrow">
+        <div class="container">
 
+            <!-- ================================ -->
+            <!-- CO JE SÚKL LÉČIVA               -->
+            <!-- ================================ -->
             <h2>Co je SÚKL Léčiva?</h2>
             <p>
                 <strong>SÚKL Léčiva</strong> je agent pro M365 Copilot, který vám umožní vyhledávat informace
@@ -31,10 +155,13 @@
                 webových stránek SÚKL se stačí zeptat přirozeným jazykem.
             </p>
             <p>
-                Agent nově umí prohledávat <strong>plné texty SPC dokumentů</strong>
+                <strong>🆕 Nově</strong> agent umí prohledávat <strong>plné texty SPC dokumentů</strong>
                 (Souhrn údajů o přípravku) pomocí AI — díky vektorovému a sémantickému vyhledávání
                 dokáže najít přesné informace o nežádoucích účincích, kontraindikacích, lékových
-                interakcích, dávkování, použití v těhotenství a mnoho dalšího.
+                interakcích, dávkování, použití v těhotenství a mnoho dalšího. Navíc má k dispozici
+                <strong>dedikované nástroje</strong> pro kontrolu lékových interakcí mezi dvěma léky,
+                vyhledání alternativních léků se stejnou účinnou látkou a cílené vyhledání konkrétní
+                sekce SPC dokumentu.
             </p>
             <p>Agent čerpá data ze dvou zdrojů:</p>
             <ul>
@@ -46,6 +173,9 @@
                 <strong>Agent si nevymýšlí.</strong> Všechna data pocházejí z otevřených dat SÚKL. Pokud informaci nenajde, řekne vám to — místo toho, aby si ji vymyslel.
             </div>
 
+            <!-- ================================ -->
+            <!-- JAK ZAČÍT                        -->
+            <!-- ================================ -->
             <h2>Jak začít</h2>
             <ol>
                 <li>Otevřete <strong>M365 Copilot</strong> na webu <a href="https://m365.cloud.microsoft/chat" target="_blank">m365.cloud.microsoft/chat</a></li>
@@ -58,129 +188,135 @@
                 <strong>Důležité:</strong> Agent je dostupný <strong>výhradně v prostředí M365 Copilot</strong>. Najdete ho v levém panelu Copilotu nebo ho zavolejte přes <strong>@SÚKL Léčiva</strong>. Pokud napíšete dotaz do obecného Copilotu bez zmínky agenta, nedostanete data ze SÚKL.
             </div>
 
+            <!-- ================================ -->
+            <!-- CO AGENT UMÍ                     -->
+            <!-- ================================ -->
             <h2>Co agent umí</h2>
 
-            <h3>Vyhledávání léků</h3>
+            <h3>💊 Vyhledávání léků</h3>
             <p>Hledejte léky podle názvu, účinné látky, ATC kódu nebo držitele registrace. Filtrujte podle způsobu výdeje, dostupnosti nebo lékové formy.</p>
             <div class="prompt-grid">
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Hledání podle názvu</div>
                     <div class="prompt-text">Najdi léky s názvem Paralen</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Hledání podle účinné látky</div>
                     <div class="prompt-text">Najdi léky s účinnou látkou ibuprofen</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Volně prodejné léky</div>
                     <div class="prompt-text">Najdi volně prodejné léky s paracetamolem</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Léky na předpis</div>
                     <div class="prompt-text">Jaké léky s metforminem jsou na předpis?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">ATC skupina</div>
                     <div class="prompt-text">Najdi léky ve skupině ATC N02BE (paracetamol)</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Léky s dodávkami</div>
                     <div class="prompt-text">Najdi léky s ibuprofenem, které mají aktivní dodávky</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Léková forma</div>
                     <div class="prompt-text">Najdi léky s paracetamolem ve formě sirupu</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Držitel registrace</div>
                     <div class="prompt-text">Jaké léky registruje společnost Zentiva?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
             </div>
 
-            <h3>Detail léku</h3>
+            <h3>📋 Detail léku</h3>
             <p>Zobrazte kompletní registrační údaje léku: složení, ATC kód, způsob výdeje, dokumenty SPC/PIL, držitele registrace a další.</p>
             <div class="prompt-grid">
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Detail podle názvu</div>
                     <div class="prompt-text">Zobraz detail léku PARALEN 500</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Detail podle kódu</div>
                     <div class="prompt-text">Zjisti detail léku s kódem SÚKL 0027370</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
             </div>
 
-            <h3>Vyhledávání lékáren</h3>
+            <h3>🏥 Vyhledávání lékáren</h3>
             <p>Hledejte lékárny podle města, PSČ nebo jména. Filtrujte pohotovostní lékárny, zásilkové lékárny nebo nemocniční lékárny.</p>
             <div class="prompt-grid">
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Lékárny ve městě</div>
                     <div class="prompt-text">Najdi lékárny v Brně</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Pohotovostní lékárny</div>
                     <div class="prompt-text">Najdi pohotovostní lékárny v Praze</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Zásilkový prodej</div>
                     <div class="prompt-text">Jaké lékárny v Ostravě nabízejí zásilkový prodej?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Nemocniční lékárny</div>
                     <div class="prompt-text">Najdi nemocniční lékárny v Plzni</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Lékárny podle PSČ</div>
                     <div class="prompt-text">Najdi lékárny s PSČ 60200</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Detail lékárny</div>
                     <div class="prompt-text">Zobraz detail lékárny s kódem pracoviště 06006000</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
             </div>
 
-            <h3>Pokročilé dotazy</h3>
+            <h3>🔬 Pokročilé dotazy</h3>
             <p>Kombinujte filtry pro přesnější výsledky:</p>
             <div class="prompt-grid">
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Kombinace filtrů</div>
                     <div class="prompt-text">Najdi volně prodejné léky s ibuprofenem ve formě tablety, které mají dodávky</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Doping</div>
                     <div class="prompt-text">Které léky s pseudoefedrinem jsou na seznamu dopingu?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Více výsledků</div>
                     <div class="prompt-text">Najdi 30 léků s omeprazolem na předpis</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Navazující dotaz</div>
                     <div class="prompt-text">Zobraz detail prvního léku z výsledků</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
             </div>
 
-            <h2>Vyhledávání v SPC dokumentech <span class="badge" style="font-size:0.7rem;vertical-align:middle;background:var(--green-600);border-color:var(--green-700);">NOVÉ</span></h2>
+            <!-- ================================ -->
+            <!-- SPC DOKUMENTY                    -->
+            <!-- ================================ -->
+            <h2>📄 Vyhledávání v SPC dokumentech <span class="badge badge-green" style="font-size:0.7rem;vertical-align:middle;">NOVÉ</span></h2>
             <p>
                 Agent dokáže prohledávat <strong>plné texty SPC</strong> (Souhrn údajů o přípravku) —
                 úřední dokument, který obsahuje veškeré odborné informace o léku: složení, indikace,
@@ -198,299 +334,444 @@
                 se hledá jak v textu, tak v sémantickém významu — proto agent najde odpovědi i na složité otázky.
             </div>
 
-            <h3>Nežádoucí účinky</h3>
+            <h3>💊 Nežádoucí účinky</h3>
             <p>Zjistěte jaké vedlejší účinky může lék způsobit, jak časté jsou a kdy vyhledat lékařskou pomoc.</p>
             <div class="prompt-grid">
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Vedlejší účinky léku</div>
                     <div class="prompt-text">Jaké jsou nežádoucí účinky paracetamolu?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Velmi časté nežádoucí účinky</div>
                     <div class="prompt-text">Jaké jsou velmi časté nežádoucí účinky ibuprofenu?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Závažné reakce</div>
                     <div class="prompt-text">Jaké závažné nežádoucí účinky může způsobit amoxicilin?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Účinky na játra</div>
-                    <div class="prompt-text">Které léky mohou poškodit játra? Najdi informace o hepatotoxicitě</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <div class="prompt-text">Jaké jsou nežádoucí účinky paracetamolu na játra?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Alergické reakce</div>
                     <div class="prompt-text">Jaké alergické reakce může vyvolat penicilin?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">GIT nežádoucí účinky</div>
                     <div class="prompt-text">Jaké gastrointestinální nežádoucí účinky má diklofenak?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
             </div>
 
-            <h3>Kontraindikace</h3>
+            <h3>⚠️ Kontraindikace</h3>
             <p>Zjistěte kdy se lék nesmí používat a jaké stavy vylučují jeho podání.</p>
             <div class="prompt-grid">
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Kontraindikace léku</div>
                     <div class="prompt-text">Jaké jsou kontraindikace ibuprofenu?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Kontraindikace u onemocnění</div>
                     <div class="prompt-text">Mohou pacienti s astmatem užívat aspirin?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Porucha funkce ledvin</div>
                     <div class="prompt-text">Které léky s metforminem jsou kontraindikovány při poruše funkce ledvin?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Kontraindikace u dětí</div>
                     <div class="prompt-text">Od jakého věku se smí podávat ibuprofen dětem?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Kontraindikace při alergiích</div>
                     <div class="prompt-text">Jaké kontraindikace má amoxicilin u pacientů s alergií na peniciliny?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
             </div>
 
-            <h3>Lékové interakce</h3>
+            <h3>🔄 Lékové interakce</h3>
             <p>Zjistěte jak léky vzájemně reagují a jaké kombinace mohou být nebezpečné.</p>
             <div class="prompt-grid">
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Interakce warfarinu</div>
                     <div class="prompt-text">Jaké jsou lékové interakce warfarinu?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Interakce dvou léků</div>
                     <div class="prompt-text">Může se ibuprofen kombinovat s warfarinem?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Interakce s alkoholem</div>
                     <div class="prompt-text">Jaké jsou interakce paracetamolu s alkoholem?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Interakce s jídlem</div>
                     <div class="prompt-text">Ovlivňuje jídlo vstřebávání amoxicilinu?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Interakce antidepresiv</div>
                     <div class="prompt-text">Jaké lékové interakce má sertralin?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Statiny a interakce</div>
                     <div class="prompt-text">Jaké léky interagují s atorvastatinem?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
             </div>
 
-            <h3>Dávkování a způsob podání</h3>
+            <h3>💉 Dávkování a způsob podání</h3>
             <p>Zjistěte doporučené dávkování, maximální denní dávku a způsob podání léku.</p>
             <div class="prompt-grid">
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Dávkování pro dospělé</div>
                     <div class="prompt-text">Jaké je doporučené dávkování paracetamolu pro dospělé?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Dávkování pro děti</div>
                     <div class="prompt-text">Jaké je dávkování ibuprofenu pro děti podle hmotnosti?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Maximální dávka</div>
                     <div class="prompt-text">Jaká je maximální denní dávka paracetamolu?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Způsob podání</div>
                     <div class="prompt-text">Jak se správně podává inzulín glargin?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Úprava dávky u seniorů</div>
                     <div class="prompt-text">Je potřeba upravit dávkování metforminu u starších pacientů?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Předávkování</div>
                     <div class="prompt-text">Co dělat při předávkování paracetamolem? Jaká je léčba?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
             </div>
 
-            <h3>Těhotenství a kojení</h3>
+            <h3>🤰 Těhotenství a kojení</h3>
             <p>Zjistěte bezpečnost léků v těhotenství a při kojení.</p>
             <div class="prompt-grid">
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Lék v těhotenství</div>
                     <div class="prompt-text">Je bezpečné užívat paracetamol v těhotenství?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Ibuprofen a těhotenství</div>
                     <div class="prompt-text">Proč se nesmí ibuprofen užívat ve třetím trimestru?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Kojení</div>
                     <div class="prompt-text">Přechází amoxicilin do mateřského mléka?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Fertilita</div>
                     <div class="prompt-text">Ovlivňuje ibuprofen plodnost?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Antidepresiva v těhotenství</div>
                     <div class="prompt-text">Jaká jsou rizika užívání sertralinu v těhotenství?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
             </div>
 
-            <h3>Farmakologie a mechanismus účinku</h3>
+            <h3>🧬 Farmakologie a mechanismus účinku</h3>
             <p>Porozumějte jak lék funguje, jak se vstřebává a jak se vylučuje z těla.</p>
             <div class="prompt-grid">
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Mechanismus účinku</div>
                     <div class="prompt-text">Jaký je mechanismus účinku omeprazolu?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Farmakokinetika</div>
                     <div class="prompt-text">Jak rychle se vstřebává paracetamol a jaký má poločas rozpadu?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Biologická dostupnost</div>
                     <div class="prompt-text">Jaká je biologická dostupnost ibuprofenu?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Metabolismus</div>
                     <div class="prompt-text">Jak se metabolizuje warfarin a jakou roli hraje CYP2C9?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Eliminace</div>
                     <div class="prompt-text">Jak se vylučuje metformin z organismu?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
             </div>
 
-            <h3>Uchovávání a expirace</h3>
+            <h3>📦 Uchovávání a expirace</h3>
             <p>Zjistěte jak správně skladovat léky a jaké jsou podmínky uchovávání.</p>
             <div class="prompt-grid">
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Podmínky uchovávání</div>
                     <div class="prompt-text">Při jaké teplotě se má uchovávat inzulín?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Doba použitelnosti po otevření</div>
                     <div class="prompt-text">Jak dlouho lze používat oční kapky po prvním otevření?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
-                    <div class="prompt-label">Chladový řetězec</div>
-                    <div class="prompt-text">Které léky vyžadují uchovávání v chladničce?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <div class="prompt-label">Uchovávání po otevření</div>
+                    <div class="prompt-text">Jak se má uchovávat Humira po otevření?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Ochrana před světlem</div>
-                    <div class="prompt-text">Které léky musí být chráněny před světlem?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <div class="prompt-text">Musí být amlodipin chráněn před světlem?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
             </div>
 
-            <h3>Indikace a terapeutické použití</h3>
+            <h3>🏥 Indikace a terapeutické použití</h3>
             <p>Zjistěte na co je lék určený a jaké jsou jeho schválené indikace.</p>
             <div class="prompt-grid">
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Indikace léku</div>
                     <div class="prompt-text">Jaké jsou indikace metforminu?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
-                    <div class="prompt-label">Použití u konkrétního stavu</div>
-                    <div class="prompt-text">Které léky se používají k léčbě migrény podle SPC?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <div class="prompt-label">Indikace konkrétního léku</div>
+                    <div class="prompt-text">Jaké jsou indikace sumatriptanu?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Prevence</div>
-                    <div class="prompt-text">Jaké léky se používají k prevenci žilní trombózy?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <div class="prompt-text">Je warfarin indikován k prevenci žilní trombózy?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Off-label informace</div>
                     <div class="prompt-text">Jaké jsou schválené indikace gabapentinu?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Léčba bolesti</div>
                     <div class="prompt-text">Které léky s tramadolem jsou indikovány pro středně silnou až silnou bolest?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
             </div>
 
-            <h3>Pokročilé SPC dotazy</h3>
+            <h3>🔬 Pokročilé SPC dotazy</h3>
             <p>Kombinujte témata a ptejte se napříč celým obsahem SPC dokumentů:</p>
             <div class="prompt-grid">
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Srovnání bezpečnostních profilů</div>
                     <div class="prompt-text">Porovnej nežádoucí účinky ibuprofenu a diklofenaku</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Řízení vozidel</div>
                     <div class="prompt-text">Ovlivňuje tramadol schopnost řídit motorová vozidla?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Porucha funkce jater</div>
                     <div class="prompt-text">Jak upravit dávkování paracetamolu u pacientů s poruchou funkce jater?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Zvláštní upozornění</div>
                     <div class="prompt-text">Jaká zvláštní upozornění obsahuje SPC pro methotrexát?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">QT prolongace</div>
-                    <div class="prompt-text">Které léky podle SPC prodlužují QT interval?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <div class="prompt-text">Prodlužuje amiodaron QT interval podle SPC?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
-                    <div class="prompt-label">Serotonergní syndrom</div>
-                    <div class="prompt-text">Které léky mohou způsobit serotoninový syndrom?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <div class="prompt-label">Serotoninový syndrom</div>
+                    <div class="prompt-text">Může sertralin způsobit serotoninový syndrom?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Vliv na laboratorní testy</div>
                     <div class="prompt-text">Ovlivňuje biotin výsledky laboratorních testů?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
                 <div class="prompt" onclick="copyPrompt(this)">
                     <div class="prompt-label">Pediatrická populace</div>
                     <div class="prompt-text">Jaké jsou specifické informace o použití amoxicilinu u dětí?</div>
-                    <span class="copy-hint">kopírovat</span>
+                    <span class="copy-hint">📋 kopírovat</span>
                 </div>
+            </div>
+
+            <!-- ================================ -->
+            <!-- KONTROLA INTERAKCÍ               -->
+            <!-- ================================ -->
+            <h3>🔄 Kontrola lékových interakcí <span class="badge badge-green" style="font-size:0.7rem;vertical-align:middle;">NOVÉ</span></h3>
+            <p>
+                Agent má dedikovaný nástroj <code>checkInteractions</code> pro kontrolu interakcí
+                mezi dvěma konkrétními léky. Zadejte názvy dvou léků nebo účinných látek a agent
+                vyhledá relevantní informace v SPC dokumentech obou léků najednou.
+            </p>
+            <div class="prompt-grid">
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Warfarin + ibuprofen</div>
+                    <div class="prompt-text">Zkontroluj interakce mezi warfarinem a ibuprofenem</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Bezpečnost kombinace</div>
+                    <div class="prompt-text">Mohu brát paracetamol a ibuprofen současně?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Antibiotika a antikoncepce</div>
+                    <div class="prompt-text">Ovlivňuje amoxicilin účinnost hormonální antikoncepce?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Statiny a další léky</div>
+                    <div class="prompt-text">Jaké jsou interakce mezi atorvastatinem a amlodipinem?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Metformin a alkohol</div>
+                    <div class="prompt-text">Zkontroluj interakce metforminu s alkoholem</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Antidepresiva + analgetika</div>
+                    <div class="prompt-text">Je bezpečné kombinovat sertralin s tramadolem?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+            </div>
+
+            <div class="callout callout-tip">
+                <strong>Tip:</strong> Nástroj <code>checkInteractions</code> prohledá SPC dokumenty obou léků
+                najednou a vrátí relevantní pasáže o vzájemných interakcích. Pro obecný přehled interakcí
+                jednoho léku použijte dotaz typu „Jaké má warfarin lékové interakce?" — agent použije
+                <code>searchDocuments</code> nebo <code>getSpcSection</code>.
+            </div>
+
+            <!-- ================================ -->
+            <!-- ALTERNATIVNÍ LÉKY                -->
+            <!-- ================================ -->
+            <h3>💊 Alternativní léky <span class="badge badge-green" style="font-size:0.7rem;vertical-align:middle;">NOVÉ</span></h3>
+            <p>
+                Nástroj <code>findAlternatives</code> najde léky se stejnou účinnou látkou (na základě
+                ATC skupiny). Výsledky můžete dále filtrovat podle dostupnosti dodávek, způsobu výdeje
+                nebo lékové formy.
+            </p>
+            <div class="prompt-grid">
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Alternativy k léku</div>
+                    <div class="prompt-text">Najdi alternativy k ibuprofenu</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Alternativy s dodávkami</div>
+                    <div class="prompt-text">Jaké alternativy k omeprazolu mají aktivní dodávky?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Volně prodejné alternativy</div>
+                    <div class="prompt-text">Existují volně prodejné alternativy k diklofenaku?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Jiná forma léku</div>
+                    <div class="prompt-text">Najdi alternativy k paracetamolu ve formě sirupu pro děti</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Generické alternativy</div>
+                    <div class="prompt-text">Jaké existují alternativy k Nolpaze (pantoprazol)?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Alternativy k antibiotiku</div>
+                    <div class="prompt-text">Najdi alternativy k amoxicilinu s aktivními dodávkami</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+            </div>
+
+            <div class="callout callout-info">
+                <strong>Jak to funguje:</strong> Agent nejprve zjistí ATC kód zadaného léku a pak vyhledá
+                všechny registrované léky se stejným ATC prefixem — tedy léky se stejnou účinnou látkou
+                a mechanismem účinku. Nejedná se o terapeutické doporučení, ale o přehled registrovaných přípravků.
+            </div>
+
+            <!-- ================================ -->
+            <!-- CÍLENÉ SEKCE SPC                 -->
+            <!-- ================================ -->
+            <h3>🎯 Cílené vyhledání sekce SPC <span class="badge badge-green" style="font-size:0.7rem;vertical-align:middle;">NOVÉ</span></h3>
+            <p>
+                Nástroj <code>getSpcSection</code> umožňuje cíleně vyhledat konkrétní sekci SPC dokumentu.
+                Na rozdíl od obecného vyhledávání (<code>searchDocuments</code>) dokáže přesně filtrovat
+                výsledky na správnou sekci — například pouze sekci 4.3 (kontraindikace) nebo 4.8 (nežádoucí účinky).
+            </p>
+            <div class="prompt-grid">
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Kontraindikace ze SPC</div>
+                    <div class="prompt-text">Najdi sekci kontraindikace z SPC pro ibuprofen</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Přesné dávkování</div>
+                    <div class="prompt-text">Jaké je přesné dávkování paracetamolu podle SPC?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Nežádoucí účinky ze SPC</div>
+                    <div class="prompt-text">Zobraz sekci nežádoucích účinků pro amoxicilin ze SPC</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Předávkování</div>
+                    <div class="prompt-text">Co říká SPC o předávkování paracetamolem?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Složení přípravku</div>
+                    <div class="prompt-text">Jaké je kvalitativní a kvantitativní složení Paralenu podle SPC?</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+                <div class="prompt" onclick="copyPrompt(this)">
+                    <div class="prompt-label">Farmakokinetika</div>
+                    <div class="prompt-text">Najdi farmakokinetické údaje warfarinu ze SPC</div>
+                    <span class="copy-hint">📋 kopírovat</span>
+                </div>
+            </div>
+
+            <div class="callout callout-tip">
+                <strong>Dostupné sekce SPC:</strong> složení, indikace, dávkování, kontraindikace,
+                zvláštní upozornění, interakce, těhotenství a kojení, účinky na řízení,
+                nežádoucí účinky, předávkování, farmakodynamika, farmakokinetika, uchovávání.
             </div>
 
             <div class="callout callout-warn">
@@ -499,8 +780,11 @@
                 Agent poskytuje data z oficiálních SPC dokumentů SÚKL, ale <strong>nenahrazuje odbornou konzultaci</strong>.
             </div>
 
+            <!-- ================================ -->
+            <!-- PŘEHLED NÁSTROJŮ                 -->
+            <!-- ================================ -->
             <h2>Přehled nástrojů</h2>
-            <p>Agent má k dispozici 5 nástrojů:</p>
+            <p>Agent má k dispozici 8 nástrojů:</p>
             <table>
                 <thead><tr><th>Nástroj</th><th>Co dělá</th></tr></thead>
                 <tbody>
@@ -509,9 +793,15 @@
                     <tr><td><code>searchPharmacies</code></td><td>Vyhledání lékáren dle města, PSČ, typu, pohotovosti, zásilkového prodeje</td></tr>
                     <tr><td><code>getPharmacyDetail</code></td><td>Detail lékárny — adresa, kontakty, pracovní doba, vedoucí lékárník</td></tr>
                     <tr><td><code>searchDocuments</code></td><td>AI vyhledávání v plných textech SPC — nežádoucí účinky, kontraindikace, interakce, dávkování, těhotenství, farmakologie</td></tr>
+                    <tr><td><code>checkInteractions</code></td><td>Kontrola lékových interakcí mezi dvěma konkrétními léky na základě SPC dokumentů</td></tr>
+                    <tr><td><code>findAlternatives</code></td><td>Vyhledání alternativních léků se stejnou účinnou látkou (ATC skupina)</td></tr>
+                    <tr><td><code>getSpcSection</code></td><td>Cílené vyhledání konkrétní sekce SPC — kontraindikace, dávkování, interakce, nežádoucí účinky aj.</td></tr>
                 </tbody>
             </table>
 
+            <!-- ================================ -->
+            <!-- CO AGENT NEUMÍ                   -->
+            <!-- ================================ -->
             <h2>Co agent neumí</h2>
             <p>I s rozšířeným vyhledáváním v SPC dokumentech má agent určitá omezení:</p>
 
@@ -519,68 +809,92 @@
                 <li class="no"><strong>Zjistit, která lékárna má konkrétní lék skladem</strong> — data neobsahují informace o skladových zásobách lékáren</li>
                 <li class="no"><strong>Zjistit ceny léků</strong> — data neobsahují ceny ani výši úhrad pojišťovnami</li>
                 <li class="no"><strong>Nahradit odbornou konzultaci lékaře nebo lékárníka</strong> — agent poskytuje informace z SPC, ale rozhodnutí o léčbě patří odborníkům</li>
-                <li class="no"><strong>Porovnat ceny nebo doporučit nejlevnější alternativu</strong></li>
+                <li class="no"><strong>Porovnat ceny léků</strong> — data neobsahují cenové informace, agent ale umí najít alternativní léky se stejnou účinnou látkou</li>
                 <li class="no"><strong>Odpovídat na dotazy mimo české léky a lékárny</strong></li>
                 <li class="no"><strong>Vyhledat léky podle diagnózy nebo příznaků</strong> — agent hledá v SPC dokumentech dle klíčových slov, nikoliv diagnosticky</li>
             </ul>
 
             <div class="callout callout-info">
-                <strong>Nově agent umí:</strong> Díky vyhledávání v SPC dokumentech agent <strong>nyní dokáže</strong>
+                <strong>🆕 Nově agent umí:</strong> Díky vyhledávání v SPC dokumentech agent <strong>nyní dokáže</strong>
                 poskytnout informace o nežádoucích účincích, kontraindikacích, lékových interakcích, dávkování
-                a použití v těhotenství — tedy informace, které dříve nebyly dostupné.
+                a použití v těhotenství. Navíc má k dispozici dedikované nástroje:
+                <strong>checkInteractions</strong> (kontrola interakcí mezi dvěma léky),
+                <strong>findAlternatives</strong> (hledání alternativních léků se stejnou účinnou látkou) a
+                <strong>getSpcSection</strong> (cílené vyhledání konkrétní sekce SPC dokumentu).
             </div>
 
             <div class="callout callout-warn">
                 <strong>Příklad nefunkčního dotazu:</strong> „Najdi lékárny v Praze, které mají Paralen" — agent <strong>nemůže</strong> propojit léky a lékárny, protože SÚKL tato data nespravuje. Můžete ale zvlášť vyhledat lékárny v Praze a zvlášť léky Paralen.
             </div>
 
+            <!-- ================================ -->
+            <!-- TIPY                             -->
+            <!-- ================================ -->
             <h2>Tipy pro efektivní používání</h2>
 
             <div class="card">
-                <div class="card-title">Buďte konkrétní</div>
+                <div class="card-title">💡 Buďte konkrétní</div>
                 <p>Čím přesnější dotaz, tím lepší výsledek. Místo „najdi nějaké léky" zkuste „najdi volně prodejné léky s ibuprofenem ve formě tablety".</p>
             </div>
 
             <div class="card">
-                <div class="card-title">Používejte filtry</div>
+                <div class="card-title">💡 Používejte filtry</div>
                 <p>Zmíněte způsob výdeje (volně prodejné / na předpis), lékovou formu (tableta, sirup, mast) nebo dostupnost dodávek — agent je přeloží na přesné filtry.</p>
             </div>
 
             <div class="card">
-                <div class="card-title">ATC kódy</div>
+                <div class="card-title">💡 ATC kódy</div>
                 <p>Pokud znáte ATC kód, použijte ho — je přesnější než textové hledání. Můžete použít i prefix: „N02*" najde celou skupinu analgetik.</p>
             </div>
 
             <div class="card">
-                <div class="card-title">Navazujte v konverzaci</div>
+                <div class="card-title">💡 Navazujte v konverzaci</div>
                 <p>Po zobrazení seznamu léků můžete říct „Zobraz detail prvního" nebo „Filtruj jen ty na předpis". Agent si pamatuje kontext.</p>
             </div>
 
             <div class="card">
-                <div class="card-title">Kód SÚKL</div>
+                <div class="card-title">💡 Kód SÚKL</div>
                 <p>Každý lék má unikátní 7místný kód SÚKL. Pokud ho znáte, můžete jít rovnou na detail: „Detail léku 0027370". Kratší čísla agent doplní nulami automaticky.</p>
             </div>
 
             <div class="card">
-                <div class="card-title">Léky a lékárny zvlášť</div>
+                <div class="card-title">💡 Léky a lékárny zvlášť</div>
                 <p>Pokud potřebujete informace o lécích i lékárnách, zadejte dva dotazy zvlášť — např. „Najdi léky s ibuprofenem" a pak „Najdi pohotovostní lékárny v Praze".</p>
             </div>
 
             <div class="card">
-                <div class="card-title">SPC dotazy — buďte specifičtí</div>
+                <div class="card-title">💡 SPC dotazy — buďte specifičtí</div>
                 <p>Při hledání v SPC dokumentech uveďte název léku/účinné látky a téma: „nežádoucí účinky paracetamolu", „kontraindikace ibuprofenu", „interakce warfarinu s alkoholem". Čím specifičtější dotaz, tím přesnější odpověď.</p>
             </div>
 
             <div class="card">
-                <div class="card-title">SPC vs. registrační data</div>
+                <div class="card-title">💡 SPC vs. registrační data</div>
                 <p>Pro administrativní údaje (forma, síla, výdej, držitel) použijte vyhledávání léků (<code>searchDrugs</code>). Pro odborné informace (dávkování, interakce, nežádoucí účinky) použijte SPC vyhledávání (<code>searchDocuments</code>). Agent sám pozná, který nástroj použít.</p>
             </div>
 
             <div class="card">
-                <div class="card-title">Sémantické vyhledávání</div>
+                <div class="card-title">💡 Sémantické vyhledávání</div>
                 <p>SPC vyhledávání rozumí významu dotazu, nejen klíčovým slovům. Můžete se ptát „je bezpečný při kojení?" místo „použití v období laktace" a agent najde správnou sekci SPC.</p>
             </div>
 
+            <div class="card">
+                <div class="card-title">💡 Interakce dvou léků</div>
+                <p>Pro kontrolu interakcí mezi dvěma konkrétními léky použijte přímou otázku: „Zkontroluj interakce mezi warfarinem a ibuprofenem". Agent použije dedikovaný nástroj <code>checkInteractions</code>, který prohledá SPC obou léků najednou.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">💡 Alternativní léky</div>
+                <p>Ptejte se na alternativy: „Najdi alternativy k ibuprofenu". Agent vyhledá léky se stejnou účinnou látkou. Můžete doplnit filtry: „s dodávkami", „volně prodejné", „ve formě sirupu".</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">💡 Cílené sekce SPC</div>
+                <p>Pro přesné informace z konkrétní sekce SPC se zeptejte: „Najdi sekci kontraindikace z SPC pro ibuprofen". Nástroj <code>getSpcSection</code> filtruje výsledky přímo na správnou sekci dokumentu — přesnější než obecné vyhledávání.</p>
+            </div>
+
+            <!-- ================================ -->
+            <!-- FAQ                              -->
+            <!-- ================================ -->
             <h2>Časté otázky</h2>
 
             <details>
@@ -662,23 +976,41 @@
                 </div>
             </details>
 
+            <details>
+                <summary>Jaký je rozdíl mezi checkInteractions a obecným dotazem na interakce?</summary>
+                <div class="detail-body">
+                    <p><strong><code>checkInteractions</code></strong> je dedikovaný nástroj pro kontrolu interakcí mezi <strong>dvěma konkrétními léky</strong>. Prohledá SPC dokumenty obou léků najednou a vrátí relevantní pasáže o jejich vzájemném působení.</p>
+                    <p>Obecný dotaz typu „Jaké má warfarin interakce?" použije <code>searchDocuments</code> nebo <code>getSpcSection</code> a vrátí celkový přehled interakcí z SPC jednoho léku.</p>
+                    <p>Pokud vás zajímá konkrétní dvojice léků, použijte <code>checkInteractions</code> — je přesnější.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>Jak funguje vyhledání alternativních léků?</summary>
+                <div class="detail-body">
+                    <p>Nástroj <code>findAlternatives</code> najde léky se stejnou účinnou látkou na základě <strong>ATC kódu</strong>. Agent zjistí ATC kód zadaného léku a vyhledá všechny registrované přípravky se stejným ATC prefixem.</p>
+                    <p>Výsledky můžete filtrovat: „s dodávkami", „volně prodejné", „ve formě tablety". Nejedná se o terapeutické doporučení — vždy konzultujte záměnu léku s lékařem nebo lékárníkem.</p>
+                </div>
+            </details>
+
+            <!-- ================================ -->
+            <!-- ZDROJE DAT                       -->
+            <!-- ================================ -->
             <h2>Zdroj dat</h2>
             <div class="card">
-                <div class="card-title">Otevřená data SÚKL</div>
+                <div class="card-title">📊 Otevřená data SÚKL</div>
                 <ul>
                     <li><strong>SÚKL OpenData</strong> — <a href="https://opendata.sukl.cz" target="_blank">opendata.sukl.cz</a> — Státní ústav pro kontrolu léčiv</li>
                     <li>Databáze registrovaných léčivých přípravků (68 000 záznamů)</li>
-                    <li>Databáze registrovaných lékáren a výdejen (2 671 záznamů)</li>
-                    <li><strong>SPC dokumenty</strong> — přes 7 000 Souhrnů údajů o přípravku (PDF), indexovaných pomocí AI s vektorovými embeddingy (text-embedding-3-large) pro hybridní sémantické vyhledávání</li>
-                </ul>
+                    <li>Databáze registrovaných lékáren a výdejen (2 671 záznamů)</li>                    <li><strong>SPC dokumenty</strong> — přes 7 000 Souhrnů údajů o přípravku (PDF), indexovaných pomocí AI s vektorovými embeddingy (text-embedding-3-large) pro hybridní sémantické vyhledávání</li>                </ul>
             </div>
 
         </div>
     </article>
 
-    <footer class="site-footer">
+    <footer>
         <div class="container">
-            Poslední aktualizace: červen 2025 · Data: Otevřená data SÚKL (opendata.sukl.cz) + SPC dokumenty
+            Poslední aktualizace: červenec 2025 · Data: Otevřená data SÚKL (opendata.sukl.cz) + SPC dokumenty
         </div>
     </footer>
 
@@ -687,10 +1019,10 @@
             const text = el.querySelector('.prompt-text').textContent;
             navigator.clipboard.writeText(text).then(() => {
                 el.classList.add('copied');
-                el.querySelector('.copy-hint').textContent = '\u2713 zkopírováno';
+                el.querySelector('.copy-hint').textContent = '✓ zkopírováno';
                 setTimeout(() => {
                     el.classList.remove('copied');
-                    el.querySelector('.copy-hint').textContent = 'kopírovat';
+                    el.querySelector('.copy-hint').textContent = '📋 kopírovat';
                 }, 1500);
             });
         }
