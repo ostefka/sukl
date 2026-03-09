@@ -8,9 +8,9 @@
 </head>
 <body>
     <header class="site-header">
-        <div class="container header-center">
+        <div class="container-narrow header-center">
             <h1>Návod pro administrátory</h1>
-            <p class="subtitle">Nasazení agenta SÚKL Léčiva do M365 Copilot</p>
+            <p class="subtitle">Jak nasadit agenta SÚKL Léčiva do M365 Copilot prostřednictvím Admin portálu</p>
             <div class="badge-row">
                 <span class="badge">M365 Admin Center</span>
                 <span class="badge">Copilot Agent</span>
@@ -24,127 +24,142 @@
         <div class="container-narrow">
 
             <h2>Než začnete</h2>
-            <p>K nasazení agenta budete potřebovat:</p>
+            <p>Pro nasazení agenta potřebujete:</p>
             <ul>
-                <li><strong>M365 Admin</strong> přístup — musíte mít oprávnění nahrávat vlastní aplikace a agenty do Teams Admin Centre</li>
-                <li><strong>M365 Copilot licenci</strong> — agent funguje pouze s aktivní licencí Microsoft 365 Copilot</li>
-                <li><strong>Balíček agenta</strong> — ZIP soubor s manifestem, pluginem a instrukcemi (ke stažení níže)</li>
+                <li><strong>Roli Global Administrator</strong>, <strong>Teams Administrator</strong> nebo <strong>AI Administrator</strong> v Microsoft 365 tenantovi</li>
+                <li><strong>ZIP balíček agenta</strong> — stáhněte níže</li>
             </ul>
 
             <a href="SUKLLeciva.zip" class="download-btn" download>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
                 Stáhnout SUKLLeciva.zip
             </a>
 
-            <h2>Postup nasazení</h2>
+            <h2>Postup nasazení — krok za krokem</h2>
 
             <div class="step">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                    <h3>Otevřete Teams Admin Centre</h3>
-                    <p>Přejděte na <a href="https://admin.teams.microsoft.com" target="_blank">admin.teams.microsoft.com</a> a přihlaste se účtem s oprávněním pro správu aplikací.</p>
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Otevřete M365 Admin Center a přejděte do sekce Agents</div>
                 </div>
+                <p>Přejděte na <a href="https://admin.microsoft.com" target="_blank">admin.microsoft.com</a> &rarr; <strong>Agents</strong> &rarr; <strong>All agents</strong> &rarr; klikněte <strong>Upload custom agent</strong>.</p>
+                <p>Nebo přejděte přímo na <a href="https://admin.microsoft.com/#/copilot/agents" target="_blank">Agents &rarr; All agents</a>.</p>
+                <img src="img/01addagent.png" alt="Krok 1 — Upload custom agent" loading="lazy">
             </div>
 
             <div class="step">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                    <h3>Přejděte do správy aplikací</h3>
-                    <p>V levém menu vyberte <strong>Teams apps → Manage apps</strong>.</p>
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Vyberte ZIP soubor</div>
                 </div>
+                <p>V dialogu nahrajte stažený soubor <code>SUKLLeciva.zip</code>.</p>
+                <img src="img/02choosefile.png" alt="Krok 2 — Výběr souboru" loading="lazy">
             </div>
 
             <div class="step">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                    <h3>Nahrajte novou aplikaci</h3>
-                    <p>Klikněte na <strong>Upload new app</strong> (tlačítko v horní části stránky). Vyberte stažený soubor <strong>SUKLLeciva.zip</strong> a potvrďte nahrání.</p>
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Potvrďte a pokračujte</div>
                 </div>
+                <p>Systém validuje balíček. Pokud je vše v pořádku, klikněte <strong>Next</strong>.</p>
+                <img src="img/03clicknext.png" alt="Krok 3 — Klikněte Next" loading="lazy">
             </div>
 
             <div class="step">
-                <div class="step-number">4</div>
-                <div class="step-content">
-                    <h3>Zkontrolujte detail aplikace</h3>
-                    <p>Po nahrání se zobrazí detail agenta. Zkontrolujte, že název je <strong>SÚKL Léčiva</strong> a typ je <strong>Declarative Agent (Copilot Agent)</strong>.</p>
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Přiřaďte uživatele</div>
                 </div>
+                <p>Vyberte, kdo bude mít k agentovi přístup:</p>
+                <ul>
+                    <li><strong>Entire organization</strong> — všichni uživatelé v tenantovi</li>
+                    <li><strong>Specific users/groups</strong> — konkrétní uživatelé nebo skupiny</li>
+                </ul>
+                <img src="img/04selectusers.png" alt="Krok 4 — Výběr uživatelů" loading="lazy">
             </div>
 
             <div class="step">
-                <div class="step-number">5</div>
-                <div class="step-content">
-                    <h3>Nastavte dostupnost</h3>
-                    <p>V sekci <strong>Users and groups</strong> nastavte, pro koho bude agent dostupný — lze přiřadit konkrétní uživatele, skupiny, nebo celou organizaci.</p>
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Odsouhlaste oprávnění</div>
                 </div>
+                <p>Zkontrolujte požadovaná oprávnění agenta a klikněte <strong>Next</strong>.</p>
+                <div class="callout callout-tip">
+                    <p><strong>Agent nepotřebuje žádná zvláštní oprávnění.</strong> Komunikuje pouze s vlastním backend API na Azure — nepřistupuje k žádným interním firemním datům ani souborům.</p>
+                </div>
+                <img src="img/05acceptpermissions.png" alt="Krok 5 — Oprávnění" loading="lazy">
             </div>
 
             <div class="step">
-                <div class="step-number">6</div>
-                <div class="step-content">
-                    <h3>Publikujte aplikaci</h3>
-                    <p>Klikněte na <strong>Publish</strong>. Změna stavu na <em>Published</em> může trvat několik minut.</p>
+                <div class="step-header">
+                    <div class="step-number">6</div>
+                    <div class="step-title">Dokončete nasazení</div>
                 </div>
+                <p>Zkontrolujte souhrn a klikněte <strong>Finish deployment</strong>.</p>
+                <img src="img/06finish.png" alt="Krok 6 — Dokončení nasazení" loading="lazy">
             </div>
 
             <div class="step">
-                <div class="step-number">7</div>
-                <div class="step-content">
-                    <h3>Ověřte funkčnost</h3>
-                    <p>Otevřete <a href="https://m365.cloud.microsoft/chat" target="_blank">M365 Copilot</a> pod uživatelem, který má přiřazenou Copilot licenci. V levém panelu by se měl zobrazit agent <strong>SÚKL Léčiva</strong>. Zkuste zadat: „Najdi léky s paracetamolem".</p>
+                <div class="step-header">
+                    <div class="step-number">7</div>
+                    <div class="step-title">Hotovo!</div>
                 </div>
+                <p>Agent je nasazen. Propagace do M365 Copilot může trvat <strong>několik minut až hodin</strong>.</p>
+                <p>Uživatelé najdou agenta v <strong>levém panelu M365 Copilot</strong> nebo ho mohou zavolat přes <strong>@SÚKL Léčiva</strong> v chatu. Zkuste zadat: „Najdi léky s paracetamolem".</p>
+                <img src="img/07done.png" alt="Krok 7 — Nasazení dokončeno" loading="lazy">
             </div>
 
             <h2>Aktualizace agenta</h2>
-            <p>Pokud potřebujete aktualizovat agenta (nová verze balíčku):</p>
+            <p>Při budoucích aktualizacích (nové funkce, opravy, změna instrukcí):</p>
             <ol>
-                <li>Stáhněte aktualizovaný ZIP balíček</li>
-                <li>V Teams Admin Centre přejděte na <strong>Manage apps</strong></li>
-                <li>Najděte aplikaci <strong>SÚKL Léčiva</strong> a otevřete její detail</li>
-                <li>Klikněte na <strong>Upload new version</strong> a nahrajte nový ZIP</li>
+                <li>Stáhněte nový ZIP balíček</li>
+                <li>V M365 Admin Center přejděte na <strong>Agents</strong> &rarr; <strong>All agents</strong></li>
+                <li>Najděte <strong>SÚKL Léčiva</strong> v seznamu</li>
+                <li>Klikněte na aplikaci &rarr; <strong>Update</strong> &rarr; nahrajte nový ZIP</li>
             </ol>
+            <div class="callout callout-info">
+                <p><strong>Poznámka:</strong> Aktualizace ZIP balíčku je potřeba pouze při změnách na straně agenta (instrukce, pluginy, ikony). Pokud se mění pouze backend server (nové datové zdroje, opravy chyb), žádná akce ze strany administrátora není nutná.</p>
+            </div>
 
             <h2>Odebrání agenta</h2>
-            <p>Pokud chcete agenta odebrat:</p>
+            <p>Pokud potřebujete agenta odebrat:</p>
             <ol>
-                <li>V Teams Admin Centre přejděte na <strong>Manage apps</strong></li>
-                <li>Najděte aplikaci <strong>SÚKL Léčiva</strong></li>
-                <li>Klikněte na <strong>Actions → Delete</strong> a potvrďte smazání</li>
+                <li>V M365 Admin Center přejděte na <strong>Agents</strong> &rarr; <strong>All agents</strong></li>
+                <li>Najděte <strong>SÚKL Léčiva</strong></li>
+                <li>Klikněte <strong>Remove</strong></li>
             </ol>
 
             <h2>Řešení problémů</h2>
             <table>
-                <thead><tr><th>Problém</th><th>Možná příčina</th><th>Řešení</th></tr></thead>
+                <thead>
+                    <tr><th>Problém</th><th>Řešení</th></tr>
+                </thead>
                 <tbody>
                     <tr>
-                        <td>Agent se nezobrazuje v Copilot panelu</td>
-                        <td>Propagace může trvat až 24 hodin</td>
-                        <td>Počkejte a obnovte stránku. Ověřte, že uživatel má přiřazenou Copilot licenci a je v cílové skupině.</td>
+                        <td>Validace ZIPu selhala</td>
+                        <td>Zkontrolujte, že používáte správný soubor <code>SUKLLeciva.zip</code>. Nerozbalujte ani neupravujte obsah.</td>
                     </tr>
                     <tr>
-                        <td>Agent vrací chybu nebo neodpovídá</td>
-                        <td>Backend API může být dočasně nedostupné</td>
-                        <td>Zkuste dotaz za minutu. Pokud problém trvá, zkontrolujte stav Azure Container Apps v Azure Portal.</td>
+                        <td>Uživatel nevidí agenta</td>
+                        <td>Propagace může trvat až několik hodin. Ověřte, že uživatel byl přiřazen v kroku 4.</td>
                     </tr>
                     <tr>
-                        <td>Nahrání ZIP selhává</td>
-                        <td>Neplatný formát nebo chybějící soubory</td>
-                        <td>Ověřte, že ZIP obsahuje <code>manifest.json</code>, <code>ai-plugin.json</code>, <code>declarativeAgent.json</code> a <code>instruction.txt</code>. Nerozbalujte a nezabalujte znovu — použijte originální ZIP.</td>
+                        <td>Agent neodpovídá</td>
+                        <td>Backend server na Azure může být dočasně nedostupný. Zkuste to za chvíli znovu. Viz <a href="user-guide.html">uživatelský návod</a> pro další tipy.</td>
                     </tr>
                 </tbody>
             </table>
 
-            <div class="callout callout-info">
-                <strong>Backend agenta</strong> běží jako <strong>Azure Container App</strong> — kontejnerizovaná Node.js aplikace
-                s připojením na SÚKL OpenData API. SPC vyhledávání využívá <strong>Azure AI Search</strong> s vektorovými embeddingy.
-                Správa backendu není součástí tohoto návodu.
+            <div class="callout callout-warn">
+                <p><strong>Důležité:</strong> Agent komunikuje s vlastním backend API běžícím jako Azure Container App, které se připojuje k SÚKL OpenData API a Azure AI Search. Žádná firemní data neopouštějí organizaci.</p>
             </div>
 
         </div>
     </article>
 
     <footer class="site-footer">
-        <div class="container">
-            Poslední aktualizace: únor 2026 · Návod pro administrátory M365
+        <div class="container-narrow">
+            Poslední aktualizace: březen 2026 · SÚKL Léčiva — M365 Copilot Agent
         </div>
     </footer>
 </body>
